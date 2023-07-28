@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
-//Reads the db.json file and returns all saved notes. 
+//Reads the db.json file and returns all saved notes.
 const readNotes = () => {
   try {
     const data = fs.readFileSync("./db/db.json", "utf8");
@@ -23,3 +23,11 @@ const readNotes = () => {
     return [];
   }
 };
+
+//returns the index.html file
+app.get("/", (req, res) => {
+  console.log(req);
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+
