@@ -30,4 +30,22 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+//reads the db file and returns the notes
+app.get("/api/notes", async (req, res) => {
+  const notes = await readNotes();
+  res.json(notes);
+});
 
+//adds a new note to the db file
+app.post("/api/notes", async (req, res) => {
+  try {
+    const newNote = req.body;
+    const notes = await readNotes();
+    notes.push(newNote);
+    await fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+    res.json(notes);
+  } catch (err) {
+    console.error("Error writing db.json", err);
+    res.status(500).json({ error: "Failed to write note" });
+  }
+});
