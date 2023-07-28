@@ -66,3 +66,8 @@ app.delete("/api/notes/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to write note" });
   }
 });
+
+//wildcard route to return the index.html file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
