@@ -49,3 +49,20 @@ app.post("/api/notes", async (req, res) => {
     res.status(500).json({ error: "Failed to write note" });
   }
 });
+
+//deletes a note from the db file
+app.delete("/api/notes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const notes = await readNotes();
+    const updatedNotes = notes.filter((note) => note.title !== id);
+    await fs.writeFileSync(
+      "./db/db.json",
+      JSON.stringify(updatedNotes, null, 2)
+    );
+    res.json(updatedNotes);
+  } catch (err) {
+    console.error("Error writing db.json", err);
+    res.status(500).json({ error: "Failed to write note" });
+  }
+});
