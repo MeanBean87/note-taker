@@ -2,6 +2,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
 //setting port and setting app to express
 const app = express();
@@ -45,9 +46,10 @@ app.get("/api/notes", async (req, res) => {
 app.post("/api/notes", async (req, res) => {
   try {
     const newNote = req.body;
+    newNote.id = uuidv4();
     const notes = await readNotes();
     notes.push(newNote);
-    await fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes));
     res.json(notes);
   } catch (err) {
     console.error("Error writing db.json", err);
@@ -58,10 +60,10 @@ app.post("/api/notes", async (req, res) => {
 //deletes a note from the db file
 app.delete("/api/notes/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
     const notes = await readNotes();
-    const updatedNotes = notes.filter((note) => note.title !== id);
-    await fs.writeFileSync(
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    fs.writeFileSync(
       "./db/db.json",
       JSON.stringify(updatedNotes, null, 2)
     );
