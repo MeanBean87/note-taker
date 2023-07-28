@@ -5,7 +5,7 @@ const fs = require("fs");
 
 //setting port and setting app to express
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 //Use for data parsing and static files
 app.use(express.urlencoded({ extended: true }));
@@ -70,4 +70,9 @@ app.delete("/api/notes/:id", async (req, res) => {
 //wildcard route to return the index.html file
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+//listener
+app.listen(PORT, function () {
+  console.log(`Server started on port ${PORT}`);
 });
