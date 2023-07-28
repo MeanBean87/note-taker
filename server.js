@@ -30,6 +30,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+//returns the notes.html file
+app.get("/notes", async (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "notes.html"));
+});
+
 //reads the db file and returns the notes
 app.get("/api/notes", async (req, res) => {
   const notes = await readNotes();
